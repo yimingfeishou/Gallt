@@ -4,7 +4,7 @@ Gallt语言介绍
 Gallt最新版本：Gallt Preview Version 0.0.0.1
 Gallt当前版本：Gallt Preview Version 0.0.0.1
 版本号：glt-pre.ver-0.0.0.1
-编译器版本：Pisces-glt-pre.ver-0.0.0.1
+解释器版本：Pisces-glt-pre.ver-0.0.0.1
 
 Gallt代码文件扩展名：*.glt
 
@@ -445,3 +445,4 @@ ER 0006：函数命名冲突
 ER 1001：类型不匹配
 
 ER 2001：数组索引超出范围
+
