@@ -1,0 +1,446 @@
+Gallt语言介绍
+创建日期：2025年10月21日
+最后更新日期：2025年10月21日
+Gallt最新版本：Gallt Preview Version 0.0.0.1
+Gallt当前版本：Gallt Preview Version 0.0.0.1
+版本号：glt-pre.ver-0.0.0.1
+编译器版本：Pisces-glt-pre.ver-0.0.0.1
+
+Gallt代码文件扩展名：*.glt
+
+main结构
+
+start main
+    //code
+end main
+
+命名main
+
+main[数字] 或 main
+
+输入输出
+
+输入
+
+input ("text")
+
+输出
+
+output ("text")
+
+示例程序
+
+start main
+    detect input ("a")
+    output ("Hello")
+end main
+
+检测输入文本为a时，输出Hello
+
+Gallt中支持多个main，使用r.main来释放前一个main
+
+如果有一个main，则直接用end main退出程序，如果有多个main，则用exit退出程序
+
+示例
+
+start main
+    output ("Hi")
+end main
+r.main
+start main1
+    output ("Hi*2")
+end main
+exit
+
+注释
+
+//单行注释
+
+/*
+多行注释
+*/
+
+运行时等待
+
+start main
+    output ("a")
+    wait time = 3000ms //表示等待3000毫秒，单位为s;min;hour，如果未声明，默认为ms
+end main
+r.main
+start main2
+    output ("b")
+end main2
+exit
+
+线程
+
+使用start thread开始线程，使用end thread回收线程，线程的命名规则同main
+
+示例程序
+
+start main
+    start thread
+        output ("a")
+    end thread
+end main
+
+re 重复执行代码，re 支持自定义重复执行次数（最少1次，最多不限次数）需要在被重复执行的代码前加入
+
+will re {
+    //code......
+    }
+
+示例
+
+start main
+    will re {
+    output ("Hello World")
+    }
+    re number=3 //要循环的次数
+end main
+
+每次执行时等待
+
+start main
+    will re {
+    output ("Hello World")
+    }
+    re number=3
+    re wait time = 3000ms
+end main
+
+普通re最多可重复执行65536次
+
+re 次数上限扩展
+
+infinite will re {
+output ("a")
+}
+re number=infinite //直到按下Ctrl+C停止
+
+事件检测
+
+detect [名称]
+
+detect input //输入事件
+detect click //点击事件
+detect enter //键入事件
+detect keyboard.click //键盘事件
+
+当满足条件时，将会执行后续操作
+
+检测后执行
+
+detect [名称]
+run {
+    //运行
+}
+
+检测点击"k"时输出Hello World
+
+detect keyboard.click="k"
+run {
+    output ("Hello World")
+}
+
+局部变量声明
+
+define [参数类型] [字符] = [值]
+
+例如
+
+define int a = 10 //定义局部变量a=10
+
+参数类型支持
+
+int
+float
+double
+
+局部变量声明仅在main中可用
+
+函数体
+
+start function 函数名 类型(参数列表) {
+    算法
+    return 值
+}
+
+调用
+
+函数名 {
+value(a , b) //传递参数
+output (return)
+}
+
+计算两数之和
+
+start function number int(a ; b) {
+    sum = a + b
+    return sum
+}
+start main
+    number {
+    value(5 , 3) //传递参数
+    output (return)
+    }
+end main
+
+运行后，会输出8
+
+定义一个x，x=5
+
+start function number int(x) {
+    value x = 5 //为x传递参数
+    return value
+}
+
+所有要使用函数中的数据的代码字段，必须用大括号包裹
+
+判断条件
+
+a < 10 //如果a小于10
+a > 10 //如果a大于10
+a = 10 //如果a等于10
+a = b //如果a的值等于b
+
+if语句
+
+if condition1
+    //code
+otherwise
+    //code
+end if
+
+如果仅判断条件并执行 if 后而不执行 otherwise 后的代码，则不用编写 otherwise 及以后的代码（end if 正常编写）
+
+获取x的值，当x小于5时，输出a，否则输出b
+
+start main
+define int a = 10
+        if (x < 5)
+            output ("a")
+        otherwise
+            output ("b")
+        end if
+    }
+end main
+
+嵌套if语句
+
+if condition1
+    //代码
+        if condition2
+            //代码
+        otherwise
+    //代码
+otherwise
+//代码
+end if
+
+循环结构
+
+For循环
+
+for i 1 to 50 {
+    output(i) //输出1-50的循环
+    }
+
+While循环
+
+define int a = 10 //局部变量声明
+while(a < 20) { //当a大于20时停止循环
+    output ("a的值是"a=a+1)
+}
+
+会得到以下结果
+
+a的值是10
+a的值是11
+a的值是12
+a的值是13
+a的值是14
+a的值是15
+a的值是16
+a的值是17
+a的值是18
+a的值是19
+a的值是20
+
+同理，要实现a=a-1也是如此
+
+define int a = 20 //局部变量声明
+while(a > 10) { //当a小于10时停止循环
+    output ("a的值是"a=a-1)
+}
+
+会得到以下结果
+
+a的值是20
+a的值是19
+a的值是18
+a的值是17
+a的值是16
+a的值是15
+a的值是14
+a的值是13
+a的值是12
+a的值是11
+a的值是10
+
+数组
+
+静态数组
+
+start arr [数组名称].(数组大小声明) [参数类型]:{参数}
+output ([数组索引]) //输出数组元素
+end arr
+
+修改数组
+
+[数组名称].[数组索引] = [新值]
+
+示例
+
+start arr nums.(5) int:{1 ; 2 ; 3 ; 4 ; 5}
+output ("第1个元素是"[0]) //索引0，代表数字1
+output ("第2个元素是"[1]) //索引1，代表数字2
+output ("第3个元素是"[2]) //索引2，代表数字3
+output ("第4个元素是"[3]) //索引3，代表数字4
+output ("第5个元素是"[4]) //索引4，代表数字5
+//修改数组
+nums.[4] = 6 //将5修改为6
+end arr
+
+变量
+
+start var.name="name" {
+    var1 [变量参数] name=[变量值]
+}
+
+调用变量
+
+[变量名].output ()
+
+示例
+
+start var.name="Peter" {
+    var1 string name="Peter"
+    var2 int name="12"
+}
+Peter.output ("Hello! My name is "{var.1}". I am "{var.2}" years old.")
+
+会得到以下输出
+
+Hello! My name is Peter. I am 12 years old.
+
+变量类型
+
+int
+float
+double
+string 字符串
+
+如果变量中包含小数运算，则必须使用浮点数变量
+
+整数计算
+
+count (左操作数 + 右操作数)
+output (count)
+
+或
+
+count (左操作数 - 右操作数)
+output (count)
+
+或
+
+count (左操作数 * 右操作数)
+output (count)
+
+或
+
+count (左操作数 / 右操作数)
+output (count)
+
+例
+
+count (5 * 8)
+output (count)
+
+小数计算
+
+单精度浮点数
+
+float.count (左操作数 + 右操作数)
+output (count)
+
+或
+
+float.count (左操作数 - 右操作数)
+output (count)
+
+或
+
+float.count (左操作数 * 右操作数)
+output (count)
+
+或
+
+float.count (左操作数 / 右操作数)
+output (count)
+
+例
+
+float.count (1.5 + 0.7)
+output (count)
+
+双精度浮点数
+
+double.count (左操作数 + 右操作数)
+output (count)
+
+或
+
+double.count (左操作数 - 右操作数)
+output (count)
+
+或
+
+double.count (左操作数 * 右操作数)
+output (count)
+
+或
+
+double.count (左操作数 / 右操作数)
+output (count)
+
+例
+
+double.count (1.5 + 0.7)
+output (count)
+
+计算π
+
+pi.count
+count.number=100 //计算位数
+output (count)
+
+或
+
+pi.count
+count.number=100 //计算位数
+output (count)
+
+如果未指定π的计算位数，则默认计算到后7位
+
+报错表一览
+
+ER 0001：多main应用程序在编写下一个main时使用r.main释放前一个main
+ER 0002：otherwise后没有执行方式
+ER 0003：未定义的代码、值或函数
+ER 0004：命名main或thread时发生错误，检查命名是否合法
+ER 0005：re执行超限
+ER 0006：函数命名冲突
+ER 1001：类型不匹配
+ER 2001：数组索引超出范围
