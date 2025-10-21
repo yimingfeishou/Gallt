@@ -423,10 +423,10 @@ output (count)
 计算π
 
 pi.count
-count.number=100 //计算位数
+count.number=[计算位数] //计算位数
 output (count)
 
-或
+例
 
 pi.count
 count.number=100 //计算位数
@@ -443,4 +443,5 @@ ER 0004：命名main或thread时发生错误，检查命名是否合法
 ER 0005：re执行超限
 ER 0006：函数命名冲突
 ER 1001：类型不匹配
+
 ER 2001：数组索引超出范围
